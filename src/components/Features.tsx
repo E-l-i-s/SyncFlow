@@ -1,15 +1,5 @@
 import React from 'react';
-import { 
-  FileText, 
-  Zap, 
-  Calendar, 
-  Globe, 
-  Shield, 
-  Clock,
-  Brain,
-  Sync,
-  CheckCircle
-} from 'lucide-react';
+import { FileText, Zap, Calendar, Globe, Shield, Clock, Brain, FolderSync as Sync, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Features = () => {
