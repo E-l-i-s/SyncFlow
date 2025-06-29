@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, Zap } from 'lucide-react';
+import { Menu, X, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
@@ -8,10 +8,10 @@ const Header = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Upload', href: '/upload' },
-    { name: 'Integrations', href: '/integrations' },
+    { name: 'Features', href: '#features' },
+    { name: 'How it works', href: '#how-it-works' },
+    { name: 'Pricing', href: '#pricing' },
+    { name: 'FAQ', href: '#faq' },
   ];
 
   return (
@@ -20,9 +20,8 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="relative">
-              <Calendar className="h-8 w-8 text-blue-600" />
-              <Zap className="h-4 w-4 text-yellow-500 absolute -top-1 -right-1" />
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Zap className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">SyncFlow</span>
           </Link>
@@ -30,28 +29,27 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navigation.map((item) => (
-              <Link
+              <a
                 key={item.name}
-                to={item.href}
-                className={`text-sm font-medium transition-colors hover:text-blue-600 ${
-                  location.pathname === item.href
-                    ? 'text-blue-600'
-                    : 'text-gray-700'
-                }`}
+                href={item.href}
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
           </nav>
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <button className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-              Sign In
+              Sign in
             </button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-              Get Started
-            </button>
+            <Link
+              to="/upload"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              Try for free
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -75,26 +73,26 @@ const Header = () => {
           >
             <div className="px-4 py-4 space-y-4">
               {navigation.map((item) => (
-                <Link
+                <a
                   key={item.name}
-                  to={item.href}
+                  href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block text-sm font-medium transition-colors hover:text-blue-600 ${
-                    location.pathname === item.href
-                      ? 'text-blue-600'
-                      : 'text-gray-700'
-                  }`}
+                  className="block text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
                 >
                   {item.name}
-                </Link>
+                </a>
               ))}
               <div className="pt-4 border-t border-gray-100 space-y-2">
                 <button className="block w-full text-left text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                  Sign In
+                  Sign in
                 </button>
-                <button className="block w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                  Get Started
-                </button>
+                <Link
+                  to="/upload"
+                  className="block w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors text-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Try for free
+                </Link>
               </div>
             </div>
           </motion.div>

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Zap, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import { Zap, Twitter, Github, Linkedin, Mail } from 'lucide-react';
 
 const Footer = () => {
   const navigation = {
     product: [
       { name: 'Features', href: '#features' },
+      { name: 'How it works', href: '#how-it-works' },
       { name: 'Pricing', href: '#pricing' },
-      { name: 'Integrations', href: '/integrations' },
       { name: 'API', href: '#api' },
     ],
     company: [
@@ -44,9 +44,8 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2">
             <Link to="/" className="flex items-center space-x-2 mb-6">
-              <div className="relative">
-                <Calendar className="h-8 w-8 text-blue-400" />
-                <Zap className="h-4 w-4 text-yellow-400 absolute -top-1 -right-1" />
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Zap className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold">SyncFlow</span>
             </Link>

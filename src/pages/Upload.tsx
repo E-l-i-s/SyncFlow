@@ -3,14 +3,14 @@ import { useDropzone } from 'react-dropzone';
 import { 
   Upload as UploadIcon, 
   FileText, 
-  Image, 
   File,
   X,
   CheckCircle,
   AlertCircle,
   Zap,
   Calendar,
-  Clock
+  Clock,
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,7 +25,6 @@ interface UploadedFile {
 
 const Upload = () => {
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
@@ -108,7 +107,8 @@ const Upload = () => {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
       'text/plain': ['.txt'],
       'application/vnd.ms-powerpoint': ['.ppt'],
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx']
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'image/*': ['.jpg', '.jpeg', '.png']
     },
     maxSize: 50 * 1024 * 1024 // 50MB
   });
@@ -149,12 +149,13 @@ const Upload = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Upload Documents</h1>
-          <p className="text-xl text-gray-600">
-            Upload your documents and let AI extract calendar events automatically
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Upload Documents</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Upload your documents and let AI extract calendar events automatically. 
+            Supports PDF, Word, Excel, PowerPoint, and more.
           </p>
         </div>
 
@@ -167,33 +168,34 @@ const Upload = () => {
         >
           <div
             {...getRootProps()}
-            className={`border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-colors ${
+            className={`border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 ${
               isDragActive
-                ? 'border-blue-500 bg-blue-50'
+                ? 'border-blue-500 bg-blue-50 scale-105'
                 : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
             }`}
           >
             <input {...getInputProps()} />
-            <div className="space-y-4">
-              <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <UploadIcon className="h-8 w-8 text-blue-600" />
+            <div className="space-y-6">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+                <UploadIcon className="h-10 w-10 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-3">
                   {isDragActive ? 'Drop files here' : 'Upload your documents'}
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 mb-6 text-lg">
                   Drag and drop files here, or click to browse
                 </p>
-                <div className="flex flex-wrap justify-center gap-2 text-sm text-gray-500">
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">PDF</span>
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">Word</span>
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">Excel</span>
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">PowerPoint</span>
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">Text</span>
+                <div className="flex flex-wrap justify-center gap-3 text-sm">
+                  <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full font-medium">PDF</span>
+                  <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full font-medium">Word</span>
+                  <span className="px-4 py-2 bg-orange-100 text-orange-800 rounded-full font-medium">Excel</span>
+                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full font-medium">PowerPoint</span>
+                  <span className="px-4 py-2 bg-gray-100 text-gray-800 rounded-full font-medium">Text</span>
+                  <span className="px-4 py-2 bg-pink-100 text-pink-800 rounded-full font-medium">Images</span>
                 </div>
-                <p className="text-xs text-gray-400 mt-2">
-                  Maximum file size: 50MB
+                <p className="text-sm text-gray-400 mt-4">
+                  Maximum file size: 50MB per file
                 </p>
               </div>
             </div>
@@ -208,10 +210,10 @@ const Upload = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.6 }}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+              className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
             >
-              <div className="p-6 border-b border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900">
+              <div className="p-6 border-b border-gray-100 bg-gray-50">
+                <h2 className="text-xl font-semibold text-gray-900">
                   Processing Files ({files.length})
                 </h2>
               </div>
@@ -230,7 +232,7 @@ const Upload = () => {
                           {getFileIcon(uploadedFile.file.name)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-gray-900 truncate">
+                          <h3 className="text-lg font-medium text-gray-900 truncate">
                             {uploadedFile.file.name}
                           </h3>
                           <p className="text-sm text-gray-500">
@@ -248,17 +250,17 @@ const Upload = () => {
                         </div>
                         
                         {uploadedFile.status === 'completed' && uploadedFile.events && (
-                          <div className="flex items-center space-x-1 text-sm text-green-600">
+                          <div className="flex items-center space-x-1 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
                             <Calendar className="h-4 w-4" />
-                            <span>{uploadedFile.events} events</span>
+                            <span>{uploadedFile.events} events found</span>
                           </div>
                         )}
                         
                         <button
                           onClick={() => removeFile(uploadedFile.id)}
-                          className="p-1 text-gray-400 hover:text-red-600 rounded"
+                          className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
                         >
-                          <X className="h-4 w-4" />
+                          <X className="h-5 w-5" />
                         </button>
                       </div>
                     </div>
@@ -272,10 +274,12 @@ const Upload = () => {
                           </span>
                           <span>{uploadedFile.progress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 rounded-full h-3">
                           <div
-                            className={`h-2 rounded-full transition-all duration-300 ${
-                              uploadedFile.status === 'uploading' ? 'bg-blue-500' : 'bg-purple-500'
+                            className={`h-3 rounded-full transition-all duration-300 ${
+                              uploadedFile.status === 'uploading' 
+                                ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                                : 'bg-gradient-to-r from-purple-500 to-purple-600'
                             }`}
                             style={{ width: `${uploadedFile.progress}%` }}
                           ></div>
@@ -285,7 +289,7 @@ const Upload = () => {
                     
                     {/* Error Message */}
                     {uploadedFile.status === 'error' && uploadedFile.error && (
-                      <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                         <p className="text-sm text-red-700">{uploadedFile.error}</p>
                       </div>
                     )}
@@ -293,13 +297,14 @@ const Upload = () => {
                     {/* Success Actions */}
                     {uploadedFile.status === 'completed' && (
                       <div className="mt-4 flex items-center space-x-3">
-                        <button className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                          <Calendar className="h-4 w-4 mr-1" />
+                        <button className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                          <Calendar className="h-4 w-4 mr-2" />
                           View Events
                         </button>
-                        <button className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-sm font-medium rounded-md text-white hover:bg-blue-700">
-                          <Clock className="h-4 w-4 mr-1" />
+                        <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-sm font-medium rounded-lg text-white hover:bg-blue-700 transition-colors">
+                          <Clock className="h-4 w-4 mr-2" />
                           Sync to Calendar
+                          <ArrowRight className="h-4 w-4 ml-1" />
                         </button>
                       </div>
                     )}
@@ -315,25 +320,27 @@ const Upload = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-8 bg-blue-50 rounded-2xl p-6"
+          className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100"
         >
-          <h3 className="text-lg font-semibold text-blue-900 mb-4">Tips for Better Results</h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-800">
-            <div className="flex items-start space-x-2">
-              <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <span>Include clear dates and times in your documents</span>
+          <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">
+            Tips for Better AI Extraction
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6 text-sm">
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <span className="text-gray-700">Include clear dates and times in your documents</span>
             </div>
-            <div className="flex items-start space-x-2">
-              <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <span>Use consistent date formats (MM/DD/YYYY or DD/MM/YYYY)</span>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <span className="text-gray-700">Use consistent date formats (MM/DD/YYYY or DD/MM/YYYY)</span>
             </div>
-            <div className="flex items-start space-x-2">
-              <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <span>Mention locations for better event context</span>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <span className="text-gray-700">Mention locations and attendees for better context</span>
             </div>
-            <div className="flex items-start space-x-2">
-              <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <span>Ensure text is clear and readable (avoid scanned images)</span>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <span className="text-gray-700">Ensure text is clear and readable (avoid low-quality scans)</span>
             </div>
           </div>
         </motion.div>

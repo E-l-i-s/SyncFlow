@@ -10,7 +10,8 @@ import {
   Search,
   Download,
   Trash2,
-  Edit3
+  Edit3,
+  TrendingUp
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -154,11 +155,10 @@ const Dashboard = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.name}</p>
                   <p className="text-2xl font-bold text-gray-900 mt-2">{stat.value}</p>
-                  <p className={`text-sm mt-2 ${
-                    stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {stat.change} from last month
-                  </p>
+                  <div className="flex items-center mt-2">
+                    <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
+                    <p className="text-sm text-green-600">{stat.change} from last month</p>
+                  </div>
                 </div>
                 <div className={`p-3 rounded-lg ${stat.color}`}>
                   <stat.icon className="h-6 w-6 text-white" />
